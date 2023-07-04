@@ -36,11 +36,22 @@ function error() {
     recevoirMeteo(villeChoisie);
 }
 
-let changerDeVille = document.querySelector('#changer');
+
+const recherche = document.querySelector('#recherche'); //input
+const btnRechercher = document.querySelector('#btnRechercher'); //btn input
+
+btnRechercher.addEventListener('click', e => {
+    e.preventDefault();
+    let villeChercher = recherche.value;
+    recevoirMeteo(villeChercher);
+});
+
+
+const changerDeVille = document.querySelector('#changer'); // btn principal
 changerDeVille.addEventListener('click', () => {
     let villeChoisie = prompt('Quelle ville souhaitez voir ?');
     recevoirMeteo(villeChoisie);
-})
+});
 
 
 async function recevoirMeteo(ville) {
