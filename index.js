@@ -70,3 +70,7 @@ async function recevoirMeteo(ville) {
         document.querySelector('#ville').textContent = donnee.name;
     }
 }
+
+
+
+// console.log("chose à aborder : changer l'apparence de la boite de dialogue, changer la phrase du temps et voir pour image, faire la section accordéon, mettre la météo dans les cartes de la section accordéon")
