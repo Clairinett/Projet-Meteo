@@ -1,35 +1,61 @@
-// let villeChoisie;
-// recevoirTemperature(villeChoisie);
+let villeChoisie;
 
-// let changerDeVille = document.querySelector('#changer');
-// changerDeVille.addEventListener('click', () => {
-//   villeChoisie = prompt('Quelle ville souhaitez-vous voir ?');
-//   recevoirTemperature(villeChoisie);
-// });
+if ('geolocation' in navigator) {
+    let watch = navigator.geolocation.watchPosition((position) => {
 
-// function recevoirTemperature(ville) {
-//   const url = 'https://api.openweathermap.org/data/2.5/weather?q=' + ville + '&appid=dc8c9152e8adaad0ec8bf635818c0d42&units=metric';
+        async function meteoGeo() {
+            const urlGeo ='https://api.openweathermap.org/data/2.5/weather?lon=' + position.coords.longitude + '&lat=' + position.coords.latitude + '&appid=f2d16c620732489a9863d5f2b2aa26a5&units=metric';
 
-//   let requete = new XMLHttpRequest(); // Nous créons un objet qui nous permettra de faire des requêtes
-//   requete.open('GET', url); // Nous récupérons juste des données
-//   requete.responseType = 'json'; // Nous attendons du JSON
-//   requete.send(); // Nous envoyons notre requête
+            const requete = await fetch(urlGeo, {
+                method: 'GET'
+            });
+        
+            if (!requete.ok) {
+                alert('Un problème est survenu.');
+            }
+            else {
+                let donnee = await requete.json(); //récupère les données
+                document.querySelector('#temperaturePrin').textContent = donnee.main.temp; // on choisit ce qu'on veut par rapport au donnée récupéré
+                document.querySelector('#ville').textContent = donnee.name;
+            }
+        }
+        meteoGeo(position);
 
-//   // Dès qu'on reçoit une réponse, cette fonction est executée
-//   requete.onload = function() {
-//     if (requete.readyState === XMLHttpRequest.DONE) {
-//       if (requete.status === 200) {
-//         let reponse = requete.response;
-//         // console.log(reponse);
-//         let temperature = reponse.main.temp;
-//         let ville       = reponse.name;
-//         // console.log(temperature);
-//         document.querySelector('#temperature_label').textContent = temperature;
-//         document.querySelector('#ville').textContent = ville;
-//       }
-//       else {
-//         alert('Un problème est intervenu, merci de revenir plus tard.');
-//       }
-//     }
-//   }
-// }
+        navigator.geolocation.clearWatch(watch);
+
+    },error, options = {enableHighAccuracy: true});
+
+}
+else {
+    let villeChoisie = "Montreal";
+    recevoirMeteo(villeChoisie);
+}
+
+function error() {
+    let villeChoisie = "Montreal";
+    recevoirMeteo(villeChoisie);
+}
+
+let changerDeVille = document.querySelector('#changer');
+changerDeVille.addEventListener('click', () => {
+    let villeChoisie = prompt('Quelle ville souhaitez voir ?');
+    recevoirMeteo(villeChoisie);
+})
+
+
+async function recevoirMeteo(ville) {
+    const url = 'https://api.openweathermap.org/data/2.5/weather?q=' + ville + '&appid=f2d16c620732489a9863d5f2b2aa26a5&units=metric';
+
+    const requete = await fetch(url, {
+        method: 'GET'
+    });
+
+    if (!requete.ok) {
+        alert('Un problème est survenu.');
+    }
+    else {
+        let donnee = await requete.json(); //récupère les données
+        document.querySelector('#temperaturePrin').textContent = donnee.main.temp; // on choisit ce qu'on veut par rapport au donnée récupéré
+        document.querySelector('#ville').textContent = donnee.name;
+    }
+}
