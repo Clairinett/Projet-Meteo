@@ -1,10 +1,12 @@
+import { apiKey } from "./module/secret";
+
 let villeChoisie;
 
 if ('geolocation' in navigator) {
     let watch = navigator.geolocation.watchPosition((position) => {
 
         async function meteoGeo() {
-            const urlGeo ='https://api.openweathermap.org/data/2.5/weather?lon=' + position.coords.longitude + '&lat=' + position.coords.latitude + '&appid=f2d16c620732489a9863d5f2b2aa26a5&units=metric';
+            const urlGeo ='https://api.openweathermap.org/data/2.5/weather?lon=' + position.coords.longitude + '&lat=' + position.coords.latitude + '&appid=' + apiKey + '&units=metric';
 
             const requete = await fetch(urlGeo, {
                 method: 'GET'
@@ -73,4 +75,4 @@ async function recevoirMeteo(ville) {
 
 
 
-// console.log("chose à aborder : changer l'apparence de la boite de dialogue, changer la phrase du temps et voir pour image, faire la section accordéon, mettre la météo dans les cartes de la section accordéon")
+// console.log("chose à aborder : changer l'apparence de la boite de dialogue, changer la phrase du temps et voir pour image, mettre la météo dans les cartes de la section accordéon")
