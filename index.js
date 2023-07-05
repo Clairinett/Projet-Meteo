@@ -1,8 +1,13 @@
-import { apiKey } from "./module/secret";
+import apiKey from "./module/secret.js";
 
 let villeChoisie;
 
 if ('geolocation' in navigator) {
+
+    let options = {
+        enableHighAccuracy: true
+    }
+
     let watch = navigator.geolocation.watchPosition((position) => {
 
         async function meteoGeo() {
@@ -21,11 +26,11 @@ if ('geolocation' in navigator) {
                 document.querySelector('#ville').textContent = donnee.name;
             }
         }
-        meteoGeo(position);
+        meteoGeo();
 
         navigator.geolocation.clearWatch(watch);
 
-    },error, options = {enableHighAccuracy: true});
+    },error, options);
 
 }
 else {
@@ -48,16 +53,18 @@ btnRechercher.addEventListener('click', e => {
     recevoirMeteo(villeChercher);
 });
 
+const inputModal = document.querySelector('#inputModal') // input modal
+const changerDeVille = document.querySelector('#changer'); // btn modal
 
-const changerDeVille = document.querySelector('#changer'); // btn principal
-changerDeVille.addEventListener('click', () => {
-    let villeChoisie = prompt('Quelle ville souhaitez voir ?');
-    recevoirMeteo(villeChoisie);
+changerDeVille.addEventListener('click', e => {
+    e.preventDefault();
+    let villeChercher = inputModal.value;
+    recevoirMeteo(villeChercher);
 });
 
 
 async function recevoirMeteo(ville) {
-    const url = 'https://api.openweathermap.org/data/2.5/weather?q=' + ville + '&appid=f2d16c620732489a9863d5f2b2aa26a5&units=metric';
+    const url = 'https://api.openweathermap.org/data/2.5/weather?q=' + ville + '&appid=' + apiKey + '&units=metric';
 
     const requete = await fetch(url, {
         method: 'GET'
@@ -72,7 +79,6 @@ async function recevoirMeteo(ville) {
         document.querySelector('#ville').textContent = donnee.name;
     }
 }
-
 
 
 // console.log("chose à aborder : changer l'apparence de la boite de dialogue, changer la phrase du temps et voir pour image, mettre la météo dans les cartes de la section accordéon")
