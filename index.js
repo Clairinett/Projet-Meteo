@@ -53,7 +53,13 @@ btnRechercher.addEventListener('click', e => {
     recevoirMeteo(villeChercher);
 });
 
-const inputModal = document.querySelector('#inputModal') // input modal
+const inputModal = document.querySelector('#inputModal'); // input modal
+const btnChangerVille = document.querySelector('#btnChangerVille');
+
+btnChangerVille.addEventListener('click', () => {
+    inputModal.focus();
+});
+
 const changerDeVille = document.querySelector('#changer'); // btn modal
 
 changerDeVille.addEventListener('click', e => {
@@ -79,6 +85,5 @@ async function recevoirMeteo(ville) {
         document.querySelector('#ville').textContent = donnee.name;
     }
 }
-
 
 // console.log("chose à aborder : changer l'apparence de la boite de dialogue, changer la phrase du temps et voir pour image, mettre la météo dans les cartes de la section accordéon")
