@@ -80,5 +80,4 @@ async function recevoirMeteo(ville) {
     }
 }
 
-
 // console.log("chose à aborder : changer l'apparence de la boite de dialogue, changer la phrase du temps et voir pour image, mettre la météo dans les cartes de la section accordéon")
