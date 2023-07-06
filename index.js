@@ -28,7 +28,7 @@ if ('geolocation' in navigator) { // recherche si geolocation est dans le naviga
                 document.querySelector('#codePays').textContent = donnee.sys.country;
 
                 let temps = donnee.weather[0].main;
-                recevoirTemps(temps);
+                recevoirTemps(temps,'#temps', '#iconMeteo');
             }
         }
         meteoGeo(); // appel de la fonction qui fait une requête ajax
@@ -38,7 +38,7 @@ if ('geolocation' in navigator) { // recherche si geolocation est dans le naviga
     },error, options); // paramètre de la fonction, si il y a une erreur c'est que la géolocalisation est possible, mais que l'utilisateur à interdit l'accès à sa position
 
     function error() { // la fonction erreur qui indique par defaut la météo de montréal
-        recevoirMeteo("Montréal");
+        recevoirMeteo('Montréal', '#ville', '#temps', '#codePays');
     };
 }
 else { // si geolocalisation pas disponible je force une ville à apparaître
@@ -50,7 +50,7 @@ const btnRechercher = document.querySelector('#btnRechercher'); //btn input
 
 btnRechercher.addEventListener('click', e => { // à l'véènement du bouton "click" execute v
     e.preventDefault(); // supprime l'évènement pas défault du formulaire grâce au paramètre "e" = "event" l'evenement du click
-    recevoirMeteo(recherche.value); // demande la météo en requete ajax avec le nom de la ville stocker qui est la valeur de l'input
+    recevoirMeteo(recherche.value, '#ville', '#temps', '#codePays'); // demande la météo en requete ajax avec le nom de la ville stocker qui est la valeur de l'input
     recherche.value = ""; // efface pour avoir un champs vide lors de prochaine saisie
 });
 
@@ -65,11 +65,11 @@ btnChangerVille.addEventListener('click', e => {
 
 btnValider.addEventListener('click', e => {
     e.preventDefault();
-    recevoirMeteo(inputModal.value);
+    recevoirMeteo(inputModal.value, '#ville', '#temps', '#codePays');
     inputModal.value = "";
 });
 
-async function recevoirMeteo(ville , villeCarte, temp, codePays ) { // fonction principal qui permet de reçevoir la météo par rapport au nom de la ville et pas de sa localisation
+async function recevoirMeteo(ville , villeCarte, temp, codePays) { // fonction principal qui permet de reçevoir la météo par rapport au nom de la ville et pas de sa localisation
     const url = 'https://api.openweathermap.org/data/2.5/weather?q=' + ville + '&appid=' + apiKey + '&units=metric';
 
     const requete = await fetch(url, {
@@ -85,7 +85,7 @@ async function recevoirMeteo(ville , villeCarte, temp, codePays ) { // fonction 
         document.querySelector(codePays).textContent = donnee.sys.country;
         document.querySelector(temp).textContent = donnee.main.temp;
 
-        let temps = donnee.weather[0].main;
+        var temps = donnee.weather[0].main;
         recevoirTemps(temps, '#temps', '#iconMeteo');
     }
 }
@@ -133,7 +133,7 @@ function recevoirTemps(temps, description, img) {
             '<img src="./assets/img/brouillard.png" alt="icon brouillard">'
             paragrapheTemps.textContent = "Le temps est couvert.";
     }
-}
+};
 
 
 // console.log("chose à aborder : mettre la météo dans les cartes de la section accordéon")
