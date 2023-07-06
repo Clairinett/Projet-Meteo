@@ -25,6 +25,8 @@ if ('geolocation' in navigator) { // recherche si geolocation est dans le naviga
                 let donnee = await requete.json(); //récupère les données
                 document.querySelector('#temperaturePrin').textContent = donnee.main.temp; // on choisit ce qu'on veut par rapport au donnée récupéré
                 document.querySelector('#ville').textContent = donnee.name; // le textcontent change la valeur de base de l'id ville par la valeur donnée par l'api nommé "name", qui est le nom de la ville
+                
+                recevoirTemps();
             }
         }
         meteoGeo(); // appel de la fonction qui fait une requête ajax
@@ -56,7 +58,7 @@ const btnValider = document.querySelector('#btnValider'); // btn modal
 
 btnChangerVille.addEventListener('click', e => {
     e.preventDefault();
-    inputModal.value.focus(); // met le focus dans l'input quand le modal s'ouvre
+    inputModal.focus(); // met le focus dans l'input quand le modal s'ouvre
 });
 
 btnValider.addEventListener('click', e => {
@@ -79,7 +81,42 @@ async function recevoirMeteo(ville) { // fonction principal qui permet de reçev
         let donnee = await requete.json(); //récupère les données
         document.querySelector('#temperaturePrin').textContent = donnee.main.temp; 
         document.querySelector('#ville').textContent = donnee.name;
+
+        function recevoirTemps() {
+            let temps = donnee.weather[0].main;
+            const paragrapheTemps = document.querySelector('#temps');
+
+            switch(temps) {
+                case 'Clear':
+                    paragrapheTemps.textContent = "Le ciel est éclairci.";
+                break;
+                case 'Clouds':
+                    paragrapheTemps.textContent = "Le ciel est nuageux.";
+                break;
+                case 'Snow':
+                    paragrapheTemps.textContent = "Le ciel est neigeux.";
+                break;
+                case 'Rain':
+                    paragrapheTemps.textContent = "Le ciel est pluvieux.";
+                break;
+                case 'Drizzle':
+                    paragrapheTemps.textContent = "Le ciel est bruineux (pluie fine).";
+                break;
+                case 'Thunderstorm':
+                    paragrapheTemps.textContent = "Le ciel est orageux.";
+                break;
+                default:
+                    paragrapheTemps.textContent = "Le ciel est brumeux.";
+            }
+        }
+        recevoirTemps();
+        
     }
 }
+
+
+
+
+
 
 // console.log("chose à aborder : changer la phrase du temps et voir pour image, mettre la météo dans les cartes de la section accordéon")
