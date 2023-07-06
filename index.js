@@ -25,8 +25,10 @@ if ('geolocation' in navigator) { // recherche si geolocation est dans le naviga
                 let donnee = await requete.json(); //récupère les données
                 document.querySelector('#temperaturePrin').textContent = donnee.main.temp; // on choisit ce qu'on veut par rapport au donnée récupéré
                 document.querySelector('#ville').textContent = donnee.name; // le textcontent change la valeur de base de l'id ville par la valeur donnée par l'api nommé "name", qui est le nom de la ville
-                
-                recevoirTemps();
+                document.querySelector('#codePays').textContent = donnee.sys.country;
+
+                let temps = donnee.weather[0].main;
+                recevoirTemps(temps);
             }
         }
         meteoGeo(); // appel de la fonction qui fait une requête ajax
@@ -81,42 +83,47 @@ async function recevoirMeteo(ville) { // fonction principal qui permet de reçev
         let donnee = await requete.json(); //récupère les données
         document.querySelector('#temperaturePrin').textContent = donnee.main.temp; 
         document.querySelector('#ville').textContent = donnee.name;
+        document.querySelector('#codePays').textContent = donnee.sys.country;
 
-        function recevoirTemps() {
-            let temps = donnee.weather[0].main;
-            const paragrapheTemps = document.querySelector('#temps');
+        let temps = donnee.weather[0].main;
+        recevoirTemps(temps);
+    }
+}
 
-            switch(temps) {
-                case 'Clear':
-                    paragrapheTemps.textContent = "Le ciel est éclairci.";
-                break;
-                case 'Clouds':
-                    paragrapheTemps.textContent = "Le ciel est nuageux.";
-                break;
-                case 'Snow':
-                    paragrapheTemps.textContent = "Le ciel est neigeux.";
-                break;
-                case 'Rain':
-                    paragrapheTemps.textContent = "Le ciel est pluvieux.";
-                break;
-                case 'Drizzle':
-                    paragrapheTemps.textContent = "Le ciel est bruineux (pluie fine).";
-                break;
-                case 'Thunderstorm':
-                    paragrapheTemps.textContent = "Le ciel est orageux.";
-                break;
-                default:
-                    paragrapheTemps.textContent = "Le ciel est brumeux.";
-            }
-        }
-        recevoirTemps();
-        
+function recevoirTemps(temps) {
+    const paragrapheTemps = document.querySelector('#temps');
+    const iconMeteo = document.querySelector('#iconMeteo');
+
+    switch(temps) {
+        case 'Clear':
+            iconMeteo.innerHTML = '<img src="./assets/img/soleil.png" alt="icon soleil">';
+            paragrapheTemps.textContent = "Le ciel est ensoleillé.";
+        break;
+        case 'Clouds':
+            iconMeteo.innerHTML = '<img src="./assets/img/des-nuages.png" alt="icon nuage">';
+            paragrapheTemps.textContent = "Le ciel est nuageux.";
+        break;
+        case 'Snow':
+            iconMeteo.innerHTML = '<img src="./assets/img/flocon-de-neige.png" alt="icon neige">';
+            paragrapheTemps.textContent = "Le ciel est neigeux.";
+        break;
+        case 'Rain':
+            iconMeteo.innerHTML = '<img src="./assets/img/pluie.png" alt="icon pluie">';
+            paragrapheTemps.textContent = "Le ciel est pluvieux.";
+        break;
+        case 'Drizzle':
+            '<img src="./assets/img/bruine.png" alt="icon bruine">'
+            paragrapheTemps.textContent = "Le ciel est bruineux (pluie fine).";
+        break;
+        case 'Thunderstorm':
+            iconMeteo.innerHTML = '<img src="./assets/img/tonnere.png" alt="icon orage">';
+            paragrapheTemps.textContent = "Le ciel est orageux.";
+        break;
+        default:
+            '<img src="./assets/img/brouillard.png" alt="icon brouillard">'
+            paragrapheTemps.textContent = "Le temps est couvert.";
     }
 }
 
 
-
-
-
-
-// console.log("chose à aborder : changer la phrase du temps et voir pour image, mettre la météo dans les cartes de la section accordéon")
+// console.log("chose à aborder : mettre la météo dans les cartes de la section accordéon")

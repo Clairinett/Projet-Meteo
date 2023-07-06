@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="description" content="Météo géolocalisé. Quel est le temps de chez vous aujourd'hui ?">
-        <link rel="stylesheet" href="./css/bootstrap.min.css">
+        <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
         <title>Météo Géo</title>
     </head>
 
@@ -32,12 +32,13 @@
         
         <main class="text-center bg-secondary d-flex align-items-center justify-content-center flex-column  m-1">
             <section class="d-flex flex-wrap justify-content-center mt-5">
-                <div class="card card-title w-10 p-5 m-3">
-                    <h1 id="ville">Votre position</h1>
+                <div class="card card-title w-10 p-5 m-3 bg-light">
+                    <h1 id="ville" class="m-0">Votre position</h1>
+                    <em id="codePays" class="mb-2">code pays</em>
                     <div class="text-dark h2" >
                         <span id="temperaturePrin">température</span>&nbsp;°C
                     </div>
-                    <img src="" alt="">
+                    <div id="iconMeteo"></div>
                     <div class="card-body">
                         <p id="temps" class="card-text">Le temps</p>
                     </div>
@@ -45,8 +46,8 @@
                 </div>
 
                 <div class="d-flex flex-column m-3 w-100" style="max-width: 250px;">
-                    <p >Le géopositionnement peut ne pas correspondre exactement à votre ville, du à votre fournisseur d'accès à internet. </p>
-                    <p >Vous pouvez changer la ville, pour avoir une meilleure position.</p>
+                    <p class="text-secondary-emphasis">Le géopositionnement peut ne pas correspondre exactement à votre ville, du à votre fournisseur d'accès à internet. </p>
+                    <p class="text-secondary-emphasis">Vous pouvez changer la ville, pour avoir une meilleure position.</p>
                 </div>
                 
             </section>
@@ -60,23 +61,23 @@
                             </button>
                         </h2>
                         <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample" >
-                            <div class="accordion-body">
-                                <article class="d-flex flex-wrap justify-content-center toggle">
-                                    <div class="card card-title m-1 mt-3 mb-2" style="max-width: 20rem;">
+                            <div class="accordion-body" style="background-color: #e4ebf5; border-radius: 0 0 25px 25px;">
+                                <article class="d-flex flex-wrap justify-content-center toggle mb-3">
+                                    <div class="card card-title m-1 mt-3 mb-2 bg-light" style="max-width: 20rem;">
                                         <div class="card-header h3">Ville 1</div>
                                         <div class="card-body">
                                             <h2 class="card-title text-dark ">température°C</h2>
                                             <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                                         </div>
                                     </div>
-                                    <div class="card card-title m-1 mt-3 mb-2" style="max-width: 20rem;">
+                                    <div class="card card-title m-1 mt-3 mb-2 bg-light" style="max-width: 20rem;">
                                         <div class="card-header h3">Ville 2</div>
                                         <div class="card-body">
                                             <h2 class="card-title text-dark ">température°C</h2>
                                             <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                                         </div>
                                     </div>
-                                    <div class="card card-title m-1 mt-3 mb-2" style="max-width: 20rem;">
+                                    <div class="card card-title m-1 mt-3 mb-2 bg-light" style="max-width: 20rem;">
                                         <div class="card-header h3">Ville 3</div>
                                         <div class="card-body">
                                             <h2 class="card-title text-dark ">température°C</h2>
@@ -118,8 +119,9 @@
         </main>
             
         <footer class="text-center mt-5 mb-5">
-            <p>API météo utilisé <strong>OpenWeatherMap</strong></p>
-            <a href="#">Mentions légales</a>
+            <a href="https://openweathermap.org/" class="text-decoration-none">API météo utilisé <strong>OpenWeatherMap</strong></a><br>
+            <a href="https://www.flaticon.com/fr/icones-gratuites/meteo" class="text-decoration-none mt-2" title="météo icônes" ><strong>Icônes météo créées par Freepik </strong>- Flaticon</a><br>
+            <a href="#" class="text-decoration-none"><strong>Mentions légales</strong></a>
         </footer>
         
         <script type="module" src="index.js"></script>
