@@ -69,7 +69,7 @@ btnValider.addEventListener('click', e => {
     inputModal.value = "";
 });
 
-async function recevoirMeteo(ville) { // fonction principal qui permet de reçevoir la météo par rapport au nom de la ville et pas de sa localisation
+async function recevoirMeteo(ville , villeCarte, temp, codePays ) { // fonction principal qui permet de reçevoir la météo par rapport au nom de la ville et pas de sa localisation
     const url = 'https://api.openweathermap.org/data/2.5/weather?q=' + ville + '&appid=' + apiKey + '&units=metric';
 
     const requete = await fetch(url, {
@@ -81,18 +81,28 @@ async function recevoirMeteo(ville) { // fonction principal qui permet de reçev
     }
     else {
         let donnee = await requete.json(); //récupère les données
-        document.querySelector('#temperaturePrin').textContent = donnee.main.temp; 
-        document.querySelector('#ville').textContent = donnee.name;
-        document.querySelector('#codePays').textContent = donnee.sys.country;
+        document.querySelector(villeCarte).textContent = donnee.name;
+        document.querySelector(codePays).textContent = donnee.sys.country;
+        document.querySelector(temp).textContent = donnee.main.temp;
 
         let temps = donnee.weather[0].main;
-        recevoirTemps(temps);
+        recevoirTemps(temps, '#temps', '#iconMeteo');
     }
 }
 
-function recevoirTemps(temps) {
-    const paragrapheTemps = document.querySelector('#temps');
-    const iconMeteo = document.querySelector('#iconMeteo');
+recevoirMeteo('Paris', '#villeUn', '#tempUn', '#codePaysUn');
+recevoirTemps(temps, '#descriptionUn', '#iconMeteoUn');
+
+recevoirMeteo('Melbourne', '#villeDeux', '#tempDeux', '#codePaysDeux');
+recevoirTemps(temps, '#descriptionDeux', '#iconMeteoDeux');
+
+recevoirMeteo('Tokyo', '#villeTrois', '#tempTrois', '#codePaysTrois');
+recevoirTemps(temps, '#descriptionTrois', '#iconMeteoTrois');
+
+
+function recevoirTemps(temps, description, img) {
+    const paragrapheTemps = document.querySelector(description);
+    const iconMeteo = document.querySelector(img);
 
     switch(temps) {
         case 'Clear':
@@ -112,7 +122,7 @@ function recevoirTemps(temps) {
             paragrapheTemps.textContent = "Le ciel est pluvieux.";
         break;
         case 'Drizzle':
-            '<img src="./assets/img/bruine.png" alt="icon bruine">'
+            iconMeteo.innerHTML = '<img src="./assets/img/bruine.png" alt="icon bruine">'
             paragrapheTemps.textContent = "Le ciel est bruineux (pluie fine).";
         break;
         case 'Thunderstorm':
