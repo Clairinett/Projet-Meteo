@@ -6,7 +6,7 @@ if ('geolocation' in navigator) { // recherche si geolocation est dans le naviga
 
     let options = {
         enableHighAccuracy: true // force une recherche plus précise, par defaut en false
-    }
+    };
 
     let watch = navigator.geolocation.watchPosition((position) => {
 
@@ -29,8 +29,8 @@ if ('geolocation' in navigator) { // recherche si geolocation est dans le naviga
 
                 let temps = donnee.weather[0].main;
                 recevoirTemps(temps,'#temps', '#iconMeteo');
-            }
-        }
+            };
+        };
         meteoGeo(); // appel de la fonction qui fait une requête ajax
 
         navigator.geolocation.clearWatch(watch); // efface les données de géolocalisation, après utilisation
@@ -43,7 +43,7 @@ if ('geolocation' in navigator) { // recherche si geolocation est dans le naviga
 }
 else { // si geolocalisation pas disponible je force une ville à apparaître
     error(); // appel de la fonction erreur
-}
+};
 
 const recherche = document.querySelector('#recherche'); // input
 const btnRechercher = document.querySelector('#btnRechercher'); //btn input
@@ -85,20 +85,10 @@ async function recevoirMeteo(ville , villeCarte, temp, codePays) { // fonction p
         document.querySelector(codePays).textContent = donnee.sys.country;
         document.querySelector(temp).textContent = donnee.main.temp;
 
-        var temps = donnee.weather[0].main;
+        let temps = donnee.weather[0].main;
         recevoirTemps(temps, '#temps', '#iconMeteo');
     }
-}
-
-recevoirMeteo('Paris', '#villeUn', '#tempUn', '#codePaysUn');
-recevoirTemps(temps, '#descriptionUn', '#iconMeteoUn');
-
-recevoirMeteo('Melbourne', '#villeDeux', '#tempDeux', '#codePaysDeux');
-recevoirTemps(temps, '#descriptionDeux', '#iconMeteoDeux');
-
-recevoirMeteo('Tokyo', '#villeTrois', '#tempTrois', '#codePaysTrois');
-recevoirTemps(temps, '#descriptionTrois', '#iconMeteoTrois');
-
+};
 
 function recevoirTemps(temps, description, img) {
     const paragrapheTemps = document.querySelector(description);
@@ -130,10 +120,18 @@ function recevoirTemps(temps, description, img) {
             paragrapheTemps.textContent = "Le ciel est orageux.";
         break;
         default:
-            '<img src="./assets/img/brouillard.png" alt="icon brouillard">'
+            iconMeteo.innerHTML = '<img src="./assets/img/brouillard.png" alt="icon brouillard">'
             paragrapheTemps.textContent = "Le temps est couvert.";
     }
 };
 
+recevoirMeteo('Paris', '#villeUn', '#tempUn', '#codePaysUn');
+recevoirTemps(temps, '#descriptionUn', '#iconMeteoUn');
+
+recevoirMeteo('Melbourne', '#villeDeux', '#tempDeux', '#codePaysDeux');
+recevoirTemps(temps, '#descriptionDeux', '#iconMeteoDeux');
+
+recevoirMeteo('Tokyo', '#villeTrois', '#tempTrois', '#codePaysTrois');
+recevoirTemps(temps, '#descriptionTrois', '#iconMeteoTrois');
 
 // console.log("chose à aborder : mettre la météo dans les cartes de la section accordéon")
