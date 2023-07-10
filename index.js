@@ -3,7 +3,6 @@ import apiKey from "./module/secret.js";
 function recevoirTemps(temps, description, img) {
     const paragrapheTemps = document.querySelector(description);
     const iconMeteo = document.querySelector(img);
-
     switch(temps) {
         case 'Clear':
             iconMeteo.innerHTML = '<img src="./assets/img/soleil.png" alt="icon soleil">';
@@ -124,14 +123,59 @@ btnValider.addEventListener('click', e => {
     inputModal.value = "";
 });
 
+// section carte de Autre ville
+async function meteoCarte(villeCarte, idVilleCarte, idCodePaysCarte, idTemperatureCarte, idDescriptionCarte, idImgCarte) {
+    const urlCarte = 'https://api.openweathermap.org/data/2.5/weather?q=' + villeCarte + '&appid=' + apiKey + '&units=metric';
 
-recevoirMeteo('Paris', '#villeUn', '#codePaysUn', '#tempUn');
-recevoirTemps(temps, '#descriptionUn', '#iconMeteoUn');
+    const requete = await fetch(urlCarte, {
+        method: 'GET'
+    });
 
-recevoirMeteo('Melbourne', '#villeDeux', '#codePaysDeux', '#tempDeux');
-recevoirTemps(temps, '#descriptionDeux', '#iconMeteoDeux');
+    if (!requete.ok) {
+        alert('Un problème est survenu.');
+    }
+    else {
+        let donnee = await requete.json(); //récupère les données
+        document.querySelector(idVilleCarte).textContent = donnee.name;
+        document.querySelector(idCodePaysCarte).textContent = donnee.sys.country;
+        document.querySelector(idTemperatureCarte).textContent = donnee.main.temp;
 
-recevoirMeteo('Tokyo', '#villeTrois', '#codePaysTrois', '#tempTrois');
-recevoirTemps(temps, '#descriptionTrois', '#iconMeteoTrois');
+        let descriptionTempsCarte = donnee.weather[0].main;
 
-// console.log("chose à aborder : mettre la météo dans les cartes de la section accordéon")
+        const paragrapheTempsCarte = document.querySelector(idDescriptionCarte);
+        const iconMeteoCarte = document.querySelector(idImgCarte);
+
+        switch(descriptionTempsCarte) {
+            case 'Clear':
+                iconMeteoCarte.innerHTML = '<img src="./assets/img/soleil.png" alt="icon soleil">';
+                paragrapheTempsCarte.textContent = "Le ciel est ensoleillé.";
+            break;
+            case 'Clouds':
+                iconMeteoCarte.innerHTML = '<img src="./assets/img/des-nuages.png" alt="icon nuage">';
+                paragrapheTempsCarte.textContent = "Le ciel est nuageux.";
+            break;
+            case 'Snow':
+                iconMeteoCarte.innerHTML = '<img src="./assets/img/flocon-de-neige.png" alt="icon neige">';
+                paragrapheTempsCarte.textContent = "Le ciel est neigeux.";
+            break;
+            case 'Rain':
+                iconMeteoCarte.innerHTML = '<img src="./assets/img/pluie.png" alt="icon pluie">';
+                paragrapheTempsCarte.textContent = "Le ciel est pluvieux.";
+            break;
+            case 'Drizzle':
+                iconMeteoCarte.innerHTML = '<img src="./assets/img/bruine.png" alt="icon bruine">'
+                paragrapheTempsCarte.textContent = "Le ciel est bruineux (pluie fine).";
+            break;
+            case 'Thunderstorm':
+                iconMeteoCarte.innerHTML = '<img src="./assets/img/tonnere.png" alt="icon orage">';
+                paragrapheTempsCarte.textContent = "Le ciel est orageux.";
+            break;
+            default:
+                iconMeteoCarte.innerHTML = '<img src="./assets/img/brouillard.png" alt="icon brouillard">'
+                paragrapheTempsCarte.textContent = "Le temps est couvert.";
+        }
+    }
+}
+meteoCarte('Cologne', '#villeUn', '#codePaysUn', '#tempUn','#descriptionUn', '#iconMeteoUn');
+meteoCarte('Melbourne', '#villeDeux', '#codePaysDeux', '#tempDeux','#descriptionDeux', '#iconMeteoDeux');
+meteoCarte('Tokyo', '#villeTrois', '#codePaysTrois', '#tempTrois','#descriptionTrois', '#iconMeteoTrois');
