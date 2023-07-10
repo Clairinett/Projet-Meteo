@@ -1,43 +1,11 @@
 import apiKey from "./module/secret.js";
 
-function recevoirTemps(temps, description, img) {
-    const paragrapheTemps = document.querySelector(description);
-    const iconMeteo = document.querySelector(img);
-    switch(temps) {
-        case 'Clear':
-            iconMeteo.innerHTML = '<img src="./assets/img/soleil.png" alt="icon soleil">';
-            paragrapheTemps.textContent = "Le ciel est ensoleillé.";
-        break;
-        case 'Clouds':
-            iconMeteo.innerHTML = '<img src="./assets/img/des-nuages.png" alt="icon nuage">';
-            paragrapheTemps.textContent = "Le ciel est nuageux.";
-        break;
-        case 'Snow':
-            iconMeteo.innerHTML = '<img src="./assets/img/flocon-de-neige.png" alt="icon neige">';
-            paragrapheTemps.textContent = "Le ciel est neigeux.";
-        break;
-        case 'Rain':
-            iconMeteo.innerHTML = '<img src="./assets/img/pluie.png" alt="icon pluie">';
-            paragrapheTemps.textContent = "Le ciel est pluvieux.";
-        break;
-        case 'Drizzle':
-            iconMeteo.innerHTML = '<img src="./assets/img/bruine.png" alt="icon bruine">'
-            paragrapheTemps.textContent = "Le ciel est bruineux (pluie fine).";
-        break;
-        case 'Thunderstorm':
-            iconMeteo.innerHTML = '<img src="./assets/img/tonnere.png" alt="icon orage">';
-            paragrapheTemps.textContent = "Le ciel est orageux.";
-        break;
-        default:
-            iconMeteo.innerHTML = '<img src="./assets/img/brouillard.png" alt="icon brouillard">'
-            paragrapheTemps.textContent = "Le temps est couvert.";
-    }
-};
+// FETCH DE RECHERCHE PAR VILLE //
 
-async function recevoirMeteo(ville , idVille, idCodePays, idTemperature) { // fonction principal qui permet de reçevoir la météo par rapport au nom de la ville et pas de sa localisation
-    const url = 'https://api.openweathermap.org/data/2.5/weather?q=' + ville + '&appid=' + apiKey + '&units=metric';
+async function recevoirMeteo(ville, idVille, idCodePays, idTemperature, idDescription, idImg) { // fonction principal qui permet de reçevoir la météo par rapport au nom de la ville et pas de sa localisation
+    const urlCarte = 'https://api.openweathermap.org/data/2.5/weather?q=' + ville + '&appid=' + apiKey + '&units=metric';
 
-    const requete = await fetch(url, {
+    const requete = await fetch(urlCarte, {
         method: 'GET'
     });
 
@@ -50,10 +18,75 @@ async function recevoirMeteo(ville , idVille, idCodePays, idTemperature) { // fo
         document.querySelector(idCodePays).textContent = donnee.sys.country;
         document.querySelector(idTemperature).textContent = donnee.main.temp;
 
-        let temps = donnee.weather[0].main;
-        recevoirTemps(temps, '#temps', '#iconMeteo');
+        let descriptionTemps = donnee.weather[0].main;
+
+        const paragrapheTemps = document.querySelector(idDescription);
+        const iconMeteo = document.querySelector(idImg);
+
+        switch(descriptionTemps) {
+            case 'Clear':
+                iconMeteo.innerHTML = '<img src="./assets/img/soleil.png" alt="icon soleil">';
+                paragrapheTemps.textContent = "Le ciel est ensoleillé.";
+            break;
+            case 'Clouds':
+                iconMeteo.innerHTML = '<img src="./assets/img/des-nuages.png" alt="icon nuage">';
+                paragrapheTemps.textContent = "Le ciel est nuageux.";
+            break;
+            case 'Snow':
+                iconMeteo.innerHTML = '<img src="./assets/img/flocon-de-neige.png" alt="icon neige">';
+                paragrapheTemps.textContent = "Le ciel est neigeux.";
+            break;
+            case 'Rain':
+                iconMeteo.innerHTML = '<img src="./assets/img/pluie.png" alt="icon pluie">';
+                paragrapheTemps.textContent = "Le ciel est pluvieux.";
+            break;
+            case 'Drizzle':
+                iconMeteo.innerHTML = '<img src="./assets/img/bruine.png" alt="icon bruine">'
+                paragrapheTemps.textContent = "Le ciel est bruineux (pluie fine).";
+            break;
+            case 'Thunderstorm':
+                iconMeteo.innerHTML = '<img src="./assets/img/tonnere.png" alt="icon orage">';
+                paragrapheTemps.textContent = "Le ciel est orageux.";
+            break;
+            default:
+                iconMeteo.innerHTML = '<img src="./assets/img/brouillard.png" alt="icon brouillard">'
+                paragrapheTemps.textContent = "Le temps est couvert.";
+        }
     }
 };
+recevoirMeteo('Cologne', '#villeUn', '#codePaysUn', '#tempUn','#descriptionUn', '#iconMeteoUn');
+recevoirMeteo('Melbourne', '#villeDeux', '#codePaysDeux', '#tempDeux','#descriptionDeux', '#iconMeteoDeux');
+recevoirMeteo('Tokyo', '#villeTrois', '#codePaysTrois', '#tempTrois','#descriptionTrois', '#iconMeteoTrois');
+
+
+// ZONE BOUTON INPUT //
+
+const recherche = document.querySelector('#recherche'); // input
+const btnRechercher = document.querySelector('#btnRechercher'); //btn input
+
+btnRechercher.addEventListener('click', e => { // à l'véènement du bouton "click" execute v
+    e.preventDefault(); // supprime l'évènement pas défault du formulaire grâce au paramètre "e" = "event" l'evenement du click
+    recevoirMeteo(recherche.value, '#ville', '#codePays', '#temperaturePrin', '#temps', '#iconMeteo'); // demande la météo en requete ajax avec le nom de la ville stocker qui est la valeur de l'input
+    recherche.value = ""; // efface pour avoir un champs vide lors de prochaine saisie
+});
+
+const btnChangerVille = document.querySelector('#btnChangerVille');
+const inputModal = document.querySelector('#inputModal'); // input modal
+const btnValider = document.querySelector('#btnValider'); // btn modal
+
+btnChangerVille.addEventListener('click', e => {
+    e.preventDefault();
+    inputModal.focus(); // met le focus dans l'input quand le modal s'ouvre
+});
+
+btnValider.addEventListener('click', e => {
+    e.preventDefault();
+    recevoirMeteo(inputModal.value, '#ville', '#codePays', '#temperaturePrin', '#temps', '#iconMeteo');
+    inputModal.value = "";
+});
+
+
+// METEO PAR GEOLOCALISATION //
 
 if ('geolocation' in navigator) { // recherche si geolocation est dans le navigator
 
@@ -77,11 +110,10 @@ if ('geolocation' in navigator) { // recherche si geolocation est dans le naviga
             else {
                 let donnee = await requete.json(); //récupère les données
                 document.querySelector('#temperaturePrin').textContent = donnee.main.temp; // on choisit ce qu'on veut par rapport au donnée récupéré
-                document.querySelector('#ville').textContent = donnee.name; // le textcontent change la valeur de base de l'id ville par la valeur donnée par l'api nommé "name", qui est le nom de la ville
+                let nomVille = document.querySelector('#ville').textContent = donnee.name; // le textcontent change la valeur de base de l'id ville par la valeur donnée par l'api nommé "name", qui est le nom de la ville
                 document.querySelector('#codePays').textContent = donnee.sys.country;
 
-                let temps = donnee.weather[0].main;
-                recevoirTemps(temps, '#temps', '#iconMeteo');
+                recevoirMeteo(nomVille, '#ville', '#codePays', '#temps', '#temps', '#iconMeteo')
             };
         };
         meteoGeo(); // appel de la fonction qui fait une requête ajax
@@ -91,91 +123,9 @@ if ('geolocation' in navigator) { // recherche si geolocation est dans le naviga
     },error, options); // paramètre de la fonction, si il y a une erreur c'est que la géolocalisation est possible, mais que l'utilisateur à interdit l'accès à sa position
 
     function error() { // la fonction erreur qui indique par defaut la météo de montréal
-        recevoirMeteo('Montréal', '#ville', '#codePays', '#temps');
+        recevoirMeteo('Montréal', '#ville', '#codePays', '#temps', '#temps', '#iconMeteo');
     };
 }
 else { // si geolocalisation pas disponible je force une ville à apparaître
     error(); // appel de la fonction erreur
 };
-
-
-const recherche = document.querySelector('#recherche'); // input
-const btnRechercher = document.querySelector('#btnRechercher'); //btn input
-
-btnRechercher.addEventListener('click', e => { // à l'véènement du bouton "click" execute v
-    e.preventDefault(); // supprime l'évènement pas défault du formulaire grâce au paramètre "e" = "event" l'evenement du click
-    recevoirMeteo(recherche.value, '#ville', '#codePays', '#temps'); // demande la météo en requete ajax avec le nom de la ville stocker qui est la valeur de l'input
-    recherche.value = ""; // efface pour avoir un champs vide lors de prochaine saisie
-});
-
-const btnChangerVille = document.querySelector('#btnChangerVille');
-const inputModal = document.querySelector('#inputModal'); // input modal
-const btnValider = document.querySelector('#btnValider'); // btn modal
-
-btnChangerVille.addEventListener('click', e => {
-    e.preventDefault();
-    inputModal.focus(); // met le focus dans l'input quand le modal s'ouvre
-});
-
-btnValider.addEventListener('click', e => {
-    e.preventDefault();
-    recevoirMeteo(inputModal.value, '#ville', '#codePays', '#temps');
-    inputModal.value = "";
-});
-
-// section carte de Autre ville
-async function meteoCarte(villeCarte, idVilleCarte, idCodePaysCarte, idTemperatureCarte, idDescriptionCarte, idImgCarte) {
-    const urlCarte = 'https://api.openweathermap.org/data/2.5/weather?q=' + villeCarte + '&appid=' + apiKey + '&units=metric';
-
-    const requete = await fetch(urlCarte, {
-        method: 'GET'
-    });
-
-    if (!requete.ok) {
-        alert('Un problème est survenu.');
-    }
-    else {
-        let donnee = await requete.json(); //récupère les données
-        document.querySelector(idVilleCarte).textContent = donnee.name;
-        document.querySelector(idCodePaysCarte).textContent = donnee.sys.country;
-        document.querySelector(idTemperatureCarte).textContent = donnee.main.temp;
-
-        let descriptionTempsCarte = donnee.weather[0].main;
-
-        const paragrapheTempsCarte = document.querySelector(idDescriptionCarte);
-        const iconMeteoCarte = document.querySelector(idImgCarte);
-
-        switch(descriptionTempsCarte) {
-            case 'Clear':
-                iconMeteoCarte.innerHTML = '<img src="./assets/img/soleil.png" alt="icon soleil">';
-                paragrapheTempsCarte.textContent = "Le ciel est ensoleillé.";
-            break;
-            case 'Clouds':
-                iconMeteoCarte.innerHTML = '<img src="./assets/img/des-nuages.png" alt="icon nuage">';
-                paragrapheTempsCarte.textContent = "Le ciel est nuageux.";
-            break;
-            case 'Snow':
-                iconMeteoCarte.innerHTML = '<img src="./assets/img/flocon-de-neige.png" alt="icon neige">';
-                paragrapheTempsCarte.textContent = "Le ciel est neigeux.";
-            break;
-            case 'Rain':
-                iconMeteoCarte.innerHTML = '<img src="./assets/img/pluie.png" alt="icon pluie">';
-                paragrapheTempsCarte.textContent = "Le ciel est pluvieux.";
-            break;
-            case 'Drizzle':
-                iconMeteoCarte.innerHTML = '<img src="./assets/img/bruine.png" alt="icon bruine">'
-                paragrapheTempsCarte.textContent = "Le ciel est bruineux (pluie fine).";
-            break;
-            case 'Thunderstorm':
-                iconMeteoCarte.innerHTML = '<img src="./assets/img/tonnere.png" alt="icon orage">';
-                paragrapheTempsCarte.textContent = "Le ciel est orageux.";
-            break;
-            default:
-                iconMeteoCarte.innerHTML = '<img src="./assets/img/brouillard.png" alt="icon brouillard">'
-                paragrapheTempsCarte.textContent = "Le temps est couvert.";
-        }
-    }
-}
-meteoCarte('Cologne', '#villeUn', '#codePaysUn', '#tempUn','#descriptionUn', '#iconMeteoUn');
-meteoCarte('Melbourne', '#villeDeux', '#codePaysDeux', '#tempDeux','#descriptionDeux', '#iconMeteoDeux');
-meteoCarte('Tokyo', '#villeTrois', '#codePaysTrois', '#tempTrois','#descriptionTrois', '#iconMeteoTrois');
