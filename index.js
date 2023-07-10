@@ -52,7 +52,7 @@ async function recevoirMeteo(ville, idVille, idCodePays, idTemperature, idDescri
                 iconMeteo.innerHTML = '<img src="./assets/img/brouillard.png" alt="icon brouillard">'
                 paragrapheTemps.textContent = "Le temps est couvert.";
         }
-    }
+    };
 };
 recevoirMeteo('Cologne', '#villeUn', '#codePaysUn', '#tempUn','#descriptionUn', '#iconMeteoUn');
 recevoirMeteo('Melbourne', '#villeDeux', '#codePaysDeux', '#tempDeux','#descriptionDeux', '#iconMeteoDeux');
@@ -113,7 +113,7 @@ if ('geolocation' in navigator) { // recherche si geolocation est dans le naviga
                 let nomVille = document.querySelector('#ville').textContent = donnee.name; // le textcontent change la valeur de base de l'id ville par la valeur donnée par l'api nommé "name", qui est le nom de la ville
                 document.querySelector('#codePays').textContent = donnee.sys.country;
 
-                recevoirMeteo(nomVille, '#ville', '#codePays', '#temps', '#temps', '#iconMeteo')
+                recevoirMeteo(nomVille, '#ville', '#codePays', '#temperaturePrin', '#temps', '#iconMeteo');
             };
         };
         meteoGeo(); // appel de la fonction qui fait une requête ajax
@@ -123,7 +123,7 @@ if ('geolocation' in navigator) { // recherche si geolocation est dans le naviga
     },error, options); // paramètre de la fonction, si il y a une erreur c'est que la géolocalisation est possible, mais que l'utilisateur à interdit l'accès à sa position
 
     function error() { // la fonction erreur qui indique par defaut la météo de montréal
-        recevoirMeteo('Montréal', '#ville', '#codePays', '#temps', '#temps', '#iconMeteo');
+        recevoirMeteo('Montréal', '#ville', '#codePays', '#temperaturePrin', '#temps', '#iconMeteo');
     };
 }
 else { // si geolocalisation pas disponible je force une ville à apparaître
