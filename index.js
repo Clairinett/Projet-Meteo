@@ -2,10 +2,11 @@ import apiKey from "./module/secret.js";
 
 // FETCH DE RECHERCHE PAR VILLE //
 
-async function recevoirMeteo(ville, idVille, idCodePays, idTemperature, idDescription, idImg) { // fonction principal qui permet de reçevoir la météo par rapport au nom de la ville et pas de sa localisation
-    const urlCarte = 'https://api.openweathermap.org/data/2.5/weather?q=' + ville + '&appid=' + apiKey + '&units=metric';
+async function recevoirMeteo(ville, idVille, idCodePays, idTemperature, idDescription, idImg) { 
+    // fonction principal qui permet de reçevoir la météo par rapport au nom de la ville et pas de sa localisation
+    const url = 'https://api.openweathermap.org/data/2.5/weather?q=' + ville + '&appid=' + apiKey + '&units=metric';
 
-    const requete = await fetch(urlCarte, {
+    const requete = await fetch(url, {
         method: 'GET'
     });
 
@@ -13,7 +14,7 @@ async function recevoirMeteo(ville, idVille, idCodePays, idTemperature, idDescri
         alert('Un problème est survenu.');
     }
     else {
-        let donnee = await requete.json(); //récupère les données
+        const donnee = await requete.json(); //récupère les données
         document.querySelector(idVille).textContent = donnee.name;
         document.querySelector(idCodePays).textContent = donnee.sys.country;
         document.querySelector(idTemperature).textContent = donnee.main.temp;
